@@ -12,7 +12,7 @@ namespace SmartCookbook.Models
         public DateTime UploadDate { get; set; }
         public required string Name { get; set; }
         public required string Description { get; set; }
-        public required List<string> Ingredients { get; set; }
-        public required List<string> Steps { get; set; }
+        public List<string>? Ingredients { get; set; }
+        public List<string>? Steps { get; set; }
     }
 }

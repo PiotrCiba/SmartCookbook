@@ -12,7 +12,7 @@ using SmartCookbook.Data;
 namespace SmartCookbook.Migrations
 {
     [DbContext(typeof(SmartCookbookContext))]
-    [Migration("20240420113148_InitialCreate")]
+    [Migration("20240429145339_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -41,7 +41,6 @@ namespace SmartCookbook.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Ingredients")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -52,7 +51,6 @@ namespace SmartCookbook.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Steps")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UploadDate")

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using SmartCookbook.Data;
 using SmartCookbook.Models;
 
-namespace SmartCookbook.Controllers
+namespace SmartCookbook.Views
 {
     public class RecipesController : Controller
     {
