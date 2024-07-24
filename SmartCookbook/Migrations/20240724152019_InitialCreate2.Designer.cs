@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartCookbook.Data;
 
@@ -11,9 +12,11 @@ using SmartCookbook.Data;
 namespace SmartCookbook.Migrations
 {
     [DbContext(typeof(SmartCookbookContext))]
-    partial class SmartCookbookContextModelSnapshot : ModelSnapshot
+    [Migration("20240724152019_InitialCreate2")]
+    partial class InitialCreate2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,21 +64,21 @@ namespace SmartCookbook.Migrations
                     b.Property<int>("Calories")
                         .HasColumnType("int");
 
-                    b.Property<double>("Carbs")
-                        .HasColumnType("float");
+                    b.Property<int>("Carbs")
+                        .HasColumnType("int");
 
-                    b.Property<double>("Fat")
-                        .HasColumnType("float");
+                    b.Property<int>("Fat")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Protein")
-                        .HasColumnType("float");
+                    b.Property<int>("Protein")
+                        .HasColumnType("int");
 
-                    b.Property<double>("Quantity")
-                        .HasColumnType("float");
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
                     b.Property<int?>("RecipeId")
                         .HasColumnType("int");
@@ -102,9 +105,11 @@ namespace SmartCookbook.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImagePath")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")

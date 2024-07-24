@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartCookbook.Data;
 
@@ -11,9 +12,11 @@ using SmartCookbook.Data;
 namespace SmartCookbook.Migrations
 {
     [DbContext(typeof(SmartCookbookContext))]
-    partial class SmartCookbookContextModelSnapshot : ModelSnapshot
+    [Migration("20240724173213_smolchanges")]
+    partial class smolchanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

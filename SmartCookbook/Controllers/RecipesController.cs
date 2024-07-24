@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using SmartCookbook.Data;
 using SmartCookbook.Models;
 
-namespace SmartCookbook.Views
+namespace SmartCookbook.Controllers
 {
     public class RecipesController : Controller
     {
@@ -54,7 +54,7 @@ namespace SmartCookbook.Views
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Author,Private,UploadDate,Name,Description,Ingredients,Steps")] Recipe recipe)
+        public async Task<IActionResult> Create([Bind("Id,Author,Private,UploadDate,Name,ImagePath,Description")] Recipe recipe)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace SmartCookbook.Views
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Author,Private,UploadDate,Name,Description,Ingredients,Steps")] Recipe recipe)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Author,Private,UploadDate,Name,ImagePath,Description")] Recipe recipe)
         {
             if (id != recipe.Id)
             {
