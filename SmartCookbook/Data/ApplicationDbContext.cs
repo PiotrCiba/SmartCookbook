@@ -4,7 +4,7 @@ using SmartCookbook.Models;
 
 namespace SmartCookbook.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<SmartCookbookUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
