@@ -5,7 +5,7 @@
 namespace SmartCookbook.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Recipes : Migration
+    public partial class TrytofixDataNull : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

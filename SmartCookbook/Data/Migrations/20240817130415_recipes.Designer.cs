@@ -13,7 +13,7 @@ namespace SmartCookbook.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20240817130415_recipes")]
-    partial class recipes
+    partial class Recipes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

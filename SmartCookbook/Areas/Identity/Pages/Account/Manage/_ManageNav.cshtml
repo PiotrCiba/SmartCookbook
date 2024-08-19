@@ -1,4 +1,6 @@
-﻿@inject SignInManager<SmartCookbookUser> SignInManager
+﻿@using SmartCookbook.Models
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<SmartCookbookUser> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }

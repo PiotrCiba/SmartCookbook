@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SmartCookbook.Models
 {
@@ -6,6 +8,5 @@ namespace SmartCookbook.Models
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string ProfilePicture { get; set; }
     }
 }

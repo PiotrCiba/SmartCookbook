@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SmartCookbook.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class recipescontext : Migration
+    public partial class Recipescontext : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
