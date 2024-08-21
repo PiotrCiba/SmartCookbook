@@ -18,9 +18,10 @@ namespace SmartCookbook.Models
         public string? ImagePath { get; set; } = string.Empty;
         public string? Description { get; set; } = string.Empty;
         public List<Ingredient>? Ingredients { get; set; }
+        public List<double>? Quantity { get; set; }
         public List<CookingStep>? Steps { get; set; }
-        public List<Rating>? Ratings { get; set; }
-        public List<Comment>? Comments { get; set; }
+        public List<Rating>? Ratings { get; set; } = new List<Rating>();
+        public List<Comment>? Comments { get; set; } = new List<Comment>();
 
         //constructor
         public Recipe(int author, bool isPrivate, DateTime uploadDate, string name, string imagePath, string description, List<Ingredient>? ingredients, List<CookingStep>? steps)

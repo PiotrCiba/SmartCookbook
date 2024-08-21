@@ -16,6 +16,11 @@
             Unit = unit;
         }
 
+        public CookingStep(string? description)
+        {
+            Description = description ?? string.Empty;
+        }
+
         public CookingStep()
         {
             Description = "";

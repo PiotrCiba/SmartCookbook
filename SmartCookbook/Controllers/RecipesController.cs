@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SmartCookbook.Data;
 using SmartCookbook.Models;
+using FuzzySharp;
 
 namespace SmartCookbook.Controllers
 {
@@ -21,13 +22,38 @@ namespace SmartCookbook.Controllers
         }
 
         // GET: Recipes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.Recipes.ToListAsync());
+            var recipes = await GetPublicRecipes();
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                var fuzzyMatches = recipes.Select(recipe => new
+                {
+                    Recipe = recipe,
+                    Similarity = Fuzz.PartialRatio(searchString.ToUpper(), recipe.Name.ToUpper())
+                }).Where(x => x.Similarity >= 66).ToList();
+
+                fuzzyMatches.Sort((x, y) => y.Similarity.CompareTo(x.Similarity));
+
+                var topMatches = fuzzyMatches.Take(10).Select(x => x.Recipe).ToList();
+                return View(topMatches);
+            }
+
+            return View(recipes);
         }
 
-        // GET: Recipes/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> PublicIndex()
+        {
+            return View(await _context.Recipes.Where(r => r.Private == false).ToListAsync());
+        }
+
+        public async Task<List<Recipe>> GetPublicRecipes()
+        {
+            return await _context.Recipes.Where(r => r.Private == false).ToListAsync();
+        }
+
+            // GET: Recipes/Details/5
+            public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {

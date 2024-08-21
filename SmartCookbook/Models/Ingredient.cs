@@ -6,26 +6,24 @@
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public double Quantity { get; set; } = 0;
         public string? Unit { get; set; }
 
         // nutritional information, per 100g
-        public int Calories { get; set; } = 0;
-        public double Fat { get; set; } = 0;
-        public double Carbs { get; set; } = 0;
-        public double Protein { get; set; } = 0;
+        public int? Calories { get; set; } = 0;
+        public double? Fat { get; set; } = 0;
+        public double? Carbs { get; set; } = 0;
+        public double? Protein { get; set; } = 0;
 
         // constructor
 
-        public Ingredient(string name, double quantity, string? unit, int calories, double fat, double carbs, double protein)
+        public Ingredient(string name, string? unit, int? calories, double? fat, double? carbs, double? protein)
         {
             Name = name;
-            Quantity = quantity;
-            Unit = unit;
-            Calories = calories;
-            Fat = fat;
-            Carbs = carbs;
-            Protein = protein;
+            Unit = unit ?? "";
+            Calories = calories ?? 0;
+            Fat = fat ?? 0;
+            Carbs = carbs ?? 0;
+            Protein = protein ?? 0;
         }
 
         public Ingredient()
