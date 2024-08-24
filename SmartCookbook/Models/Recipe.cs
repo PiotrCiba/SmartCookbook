@@ -6,7 +6,7 @@ namespace SmartCookbook.Models
     public class Recipe
     {
         public int Id { get; set; }
-        public int Author {  get; set; }
+        public string Author {  get; set; }
         public bool Private { get; set; }
 
         [Display(Name = "Upload Date")]
@@ -17,14 +17,13 @@ namespace SmartCookbook.Models
         [Display(Name = "Image Path")]
         public string? ImagePath { get; set; } = string.Empty;
         public string? Description { get; set; } = string.Empty;
-        public List<Ingredient>? Ingredients { get; set; }
-        public List<double>? Quantity { get; set; }
+        public List<IngredientInstance>? Ingredients { get; set; }
         public List<CookingStep>? Steps { get; set; }
         public List<Rating>? Ratings { get; set; } = new List<Rating>();
         public List<Comment>? Comments { get; set; } = new List<Comment>();
 
         //constructor
-        public Recipe(int author, bool isPrivate, DateTime uploadDate, string name, string imagePath, string description, List<Ingredient>? ingredients, List<CookingStep>? steps)
+        public Recipe(string author, bool isPrivate, DateTime uploadDate, string name, string imagePath, string description, List<IngredientInstance>? ingredients, List<CookingStep>? steps)
         {
             Author = author;
             Private = isPrivate;
@@ -38,13 +37,13 @@ namespace SmartCookbook.Models
 
         public Recipe()
         {
-            Author = 0;
+            Author = "";
             Private = false;
             UploadDate = DateTime.Now;
             Name = "";
             ImagePath = "";
             Description = "";
-            Ingredients = new List<Ingredient>();
+            Ingredients = new List<IngredientInstance>();
             Steps = new List<CookingStep>();
         }
 

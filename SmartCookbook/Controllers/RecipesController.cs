@@ -3,65 +3,48 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SmartCookbook.Data;
 using SmartCookbook.Models;
-using FuzzySharp;
 
 namespace SmartCookbook.Controllers
 {
     public class RecipesController : Controller
     {
-        private readonly ApplicationDbContext _context;
+		private readonly UserManager<SmartCookbookUser> _userManager;
+		private readonly SignInManager<SmartCookbookUser> _signInManager;
+		private readonly ApplicationDbContext _context;
 
-        public RecipesController(ApplicationDbContext context)
+        public RecipesController(
+			UserManager<SmartCookbookUser> userManager,
+			SignInManager<SmartCookbookUser> signInManager,
+			ApplicationDbContext context)
         {
-            _context = context;
+			_userManager = userManager;
+			_signInManager = signInManager;
+			_context = context;
         }
 
         // GET: Recipes
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index()
         {
-            var recipes = await GetPublicRecipes();
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                var fuzzyMatches = recipes.Select(recipe => new
-                {
-                    Recipe = recipe,
-                    Similarity = Fuzz.PartialRatio(searchString.ToUpper(), recipe.Name.ToUpper())
-                }).Where(x => x.Similarity >= 66).ToList();
-
-                fuzzyMatches.Sort((x, y) => y.Similarity.CompareTo(x.Similarity));
-
-                var topMatches = fuzzyMatches.Take(10).Select(x => x.Recipe).ToList();
-                return View(topMatches);
-            }
-
-            return View(recipes);
+            return View(await _context.Recipes.ToListAsync());
         }
 
-        public async Task<IActionResult> PublicIndex()
-        {
-            return View(await _context.Recipes.Where(r => r.Private == false).ToListAsync());
-        }
-
-        public async Task<List<Recipe>> GetPublicRecipes()
-        {
-            return await _context.Recipes.Where(r => r.Private == false).ToListAsync();
-        }
-
-            // GET: Recipes/Details/5
-            public async Task<IActionResult> Details(int? id)
+        // GET: Recipes/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var recipe = await _context.Recipes
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var recipe = await _context.Recipes.Include(r => r.Ingredients).ThenInclude(ii => ii.Ingredient)
+                                            .Include(r => r.Steps)
+                                            .FirstOrDefaultAsync(m => m.Id == id);
             if (recipe == null)
             {
                 return NotFound();
@@ -81,15 +64,22 @@ namespace SmartCookbook.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Author,Private,UploadDate,Name,ImagePath,Description")] Recipe recipe)
+        [Authorize]
+        public async Task<IActionResult> Create([Bind("Id,Author,Private,UploadDate,Name,ImagePath,Description")] Recipe recipe,
+                                                List<IngredientInstance> ingredients,
+                                                List<CookingStep> steps)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(recipe);
+                Recipe temp = recipe;
+                temp.Author = _userManager.GetUserName(User);
+                temp.UploadDate = DateTime.Now;
+                temp.Ingredients = ingredients;
+                temp.Steps = steps;
+                _context.Add(temp);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", new { id = temp.Id });
             }
             return View(recipe);
         }

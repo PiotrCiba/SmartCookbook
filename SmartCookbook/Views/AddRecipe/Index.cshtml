@@ -1,26 +1,27 @@
 ﻿@model SmartCookbook.Models.Recipe
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "CreateRecipe";
 }
 
-<h1>Create</h1>
+<h1>CreateRecipe</h1>
 
 <h4>Recipe</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
+    <div class="col-md-9">
+        <form asp-action="CreateRecipe" method="post">
+            @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group form-check">
-				<label class="form-check-label">
-					<input class="form-check-input" asp-for="Private" /> @Html.DisplayNameFor(model => model.Private)
-				</label>
-			</div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Private" /> @Html.DisplayNameFor(model => model.Private)
+                </label>
             </div>
             <div class="form-group">
                 <label asp-for="ImagePath" class="control-label"></label>
@@ -33,19 +34,19 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Ingredients" class="control-label" />
+                <label asp-for="Ingredients" class="control-label"/>
                 <div id="newIngredient">
                     <input type="hidden" id="total" value="0" />
                 </div>
                 <button id="addIngredient" type="button" class="btn btn-info">Add Ingredient</button>
             </div>
             <div class="form-group">
-                <label asp-for="Steps" class="control-label" />
+                <label asp-for="Steps" class="control-label"/>
                 <div id="newStep">
-                    <input type="hidden" id="total" value="0" />
+                        <input type="hidden" id="total" value="0" />
                 </div>
                 <button id="addStep" type="button" class="btn btn-info">Add Step</button>
-            </div>            
+            </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -58,9 +59,7 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
         $("#addIngredient").click(function () {
             var rowCount = parseInt($("#total").val());
@@ -71,7 +70,7 @@
 
             html += '<label asp-for"Ingredient.Name" class="control-label"> Ingredient </label>';
             html += '<input type="text" name="Ingredients[' + (rowCount - 1) + '].Ingredient.Name" placeholder="Enter Name" />';
-
+          
             html += '<div class = details style="display:none">';
             html += '<label asp-for"Ingredient.Calories" class="control-label"> Calories </label>';
             html += '<input type="number" name="Ingredients[' + (rowCount - 1) + '].Ingredient.Calories" value="0" />';
@@ -112,13 +111,13 @@
 
             html += '<button id="removeRow" type="button" class="btn btn-danger">Remove</button>';
             html += '</div>';
-
+            
             $('#newStep').append(html);
         });
 
         $(document).on('click', '#showDetails', function () {
-            $(this).closest('#inputRow').find('.details').slideToggle();
-        });
+			$(this).closest('#inputRow').find('.details').slideToggle();
+		});
 
         $(document).on('click', '#removeRow', function () {
             var rowCount = parseInt($("#total").val());
@@ -128,3 +127,23 @@
         });
     </script>
 }
+
+<!--
+		.details {
+			display: none;
+		}
+
+        .input-field{
+            padding: 5px;
+            margin-right: 10px;
+        }
+
+        .input-row{
+            display: flex;
+			justify-content: space-between;
+            flex-wrap: wrap;
+			margin-bottom: 10px;
+        }
+-->
+        
+

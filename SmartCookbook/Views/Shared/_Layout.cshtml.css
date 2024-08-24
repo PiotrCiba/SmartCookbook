@@ -46,3 +46,19 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 60px;
 }
+
+.details {
+    display: none;
+}
+
+.input-field {
+    padding: 5px;
+    margin-right: 10px;
+}
+
+.input-row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}

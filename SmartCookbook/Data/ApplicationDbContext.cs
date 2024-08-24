@@ -16,5 +16,6 @@ namespace SmartCookbook.Data
         public DbSet<CookingStep> CookingSteps { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<SmartCookbook.Models.IngredientInstance> IngredientInstance { get; set; } = default!;
     }
 }
