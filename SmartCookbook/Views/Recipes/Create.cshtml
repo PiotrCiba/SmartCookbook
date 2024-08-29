@@ -35,7 +35,7 @@
             <div class="form-group">
                 <label asp-for="Ingredients" class="control-label" />
                 <div id="newIngredient">
-                    <input type="hidden" id="totalIngredients" value="0" />
+                    <input type="hidden" id="totalIngredients" value="0"/>
                 </div>
                 <button id="addIngredient" type="button" class="btn btn-info">Add Ingredient</button>
             </div>
@@ -68,10 +68,8 @@
             $("#totalIngredients").val(rowCount);
             var html = '';
             html += '<div id="inputRow">';
-
             html += '<label asp-for"Ingredient.Name" class="control-label"> Ingredient </label>';
             html += '<input type="text" name="Ingredients[' + (rowCount - 1) + '].Ingredient.Name" placeholder="Enter Name" />';
-
             html += '<div class = details style="display:none">';
             html += '<label asp-for"Ingredient.Calories" class="control-label"> Calories </label>';
             html += '<input type="number" name="Ingredients[' + (rowCount - 1) + '].Ingredient.Calories" value="0" />';

@@ -35,33 +35,55 @@
             </div>
             <div class="form-group">
                 <label asp-for="Ingredients" class="control-label" />
-
-                @foreach (var ingredient in Model.Ingredients)
+                @if (Model.Ingredients != null)
                 {
-                    <div class="ingredient">
-                        @Html.DisplayFor(modelItem => ingredient.Ingredient.Name)
-                        <button class="toggle-nutrition">Show Details</button>
-                        <div class="nutrition-info" style="display:none;">
-                            <p>Calories: @ingredient.Ingredient.Calories</p>
-                            <p>Carbs: @ingredient.Ingredient.Carbs</p>
-                            <p>Fats: @ingredient.Ingredient.Fat</p>
-                            <p>Proteins: @ingredient.Ingredient.Protein</p>
-                        </div>
-                        <input asp-for="@ingredient.Quantity" />
-                        <input asp-for="@ingredient.Unit" />
+                    <div class="ingredientRow">
+                        <input type="hidden" id="totalIngredients" value="0" />
                     </div>
+                    @for (int i = 0; i < Model.Ingredients.Count; i++)
+					{
+                        <div class="ingredientRow">
+                            @Html.DisplayFor(modelItem => Model.Ingredients[i].Ingredient.Name)
+                            <label asp-for="Ingredients[i].Ingredient.Name" ></label>/>
+                            <input asp-for="Ingredients[i].Ingredient.Name" />
+                            <button class="showDetails">Show Details</button>
+                            <div class="nutrition-info" style="display:none;">
+
+                                <label asp-for="Ingredients[i].Ingredient.Calories"></label>
+                                <input asp-for="Ingredients[i].Ingredient.Calories" />
+                                <label asp-for="Ingredients[i].Ingredient.Calories"></label>
+                                <input asp-for="Ingredients[i].Ingredient.Calories" />
+                                <label asp-for="Ingredients[i].Ingredient.Carbs"></label>
+                                <input asp-for="Ingredients[i].Ingredient.Carbs" />
+                                <label asp-for="Ingredients[i].Ingredient.Fat"></label>
+                                <input asp-for="Ingredients[i].Ingredient.Fat" />
+                                <label asp-for="Ingredients[i].Ingredient.Protein"></label>
+                                <input asp-for="Ingredients[i].Ingredient.Protein" />
+                            </div>
+                            <label asp-for="Ingredients[i].Quantity"></label>
+                            <input asp-for="Ingredients[i].Quantity" />
+                            <label asp-for="Ingredients[i].Unit"></label>
+                            <input asp-for="Ingredients[i].Unit" />
+                        </div>
+                    }
                 }
             </div>
             <button type="button" onclick="addIngredientRow()">Add Ingredient</button>
 
             <div id="steps">
-                @for (int i = 0; i < Model.Steps.Count; i++)
+                @if (Model.Steps != null)
                 {
-                    <div class="step-row">
-                        <input asp-for="@Model.Steps[i].Description" />
-                        <input asp-for="@Model.Steps[i].Duration"/>
-                        <input asp-for="@Model.Steps[i].Unit"/>
+                    <div class="stepRow">
+                        <input type="hidden" id="totalSteps" value="0" />
                     </div>
+                    @for (int i = 0; i < Model.Steps.Count; i++)
+                    {
+                        <div class="stepRow">
+                            <input asp-for="Steps[i].Description" />
+                            <input asp-for="Steps[i].Duration" />
+                            <input asp-for="Steps[i].Unit" />
+                        </div>
+                    }
                 }
             </div>
             <button type="button" onclick="addStepRow()">Add Step</button>
@@ -80,26 +102,45 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
 
-        $(document).ready(function () {
-            $('.toggle-nutrition').click(function () {
-                $(this).next('.nutrition-info').slideToggle('fast');
-                // Toggle text between "Show Nutrition" and "Hide Nutrition"
-                var buttonText = $(this).text();
-                $(this).text(buttonText == "Show Details" ? "Hide Details" : "Show Details");
-            });
+        $(document).on('click', '#showDetails', function () {
+            $(this).closest('#inputRow').find('.details').slideToggle();
         });
 
         function addIngredientRow() {
-                
-            $('#ingredients').append(html);
+            var rowCount = parseInt($("#ingredientRow").val());
+            rowCount++;
+            $("#ingredientRow").val(rowCount);
+            var html = '';
+                html += '< div class="ingredient" >';
+                html += '<label asp-for="Ingredients[' + (rowCount + 1) + '].Ingredient.Name"></label>';
+            html += '<input asp-for="Ingredients[' + (rowCount + 1) + '].Ingredient.Name" />';
+                html += '<button class="toggle-nutrition">Show Details</button>';
+                html += '<div class="nutrition-info" style="display:none;">';
+                html += '<input asp-for="Ingredients[' + (rowCount + 1)  + '].Ingredient.Calories" />';
+                html += '<input asp-for="Ingredients[' + (rowCount + 1)  + '].Ingredient.Calories" />';
+                html += '<input asp-for="Ingredients[' + (rowCount + 1)  + '].Ingredient.Carbs" />';
+                html += '<input asp-for="Ingredients[' + (rowCount + 1)  + '].Ingredient.Fat" />';
+                html += '<input asp-for="Ingredients[' + (rowCount + 1)  + '].Ingredient.Protein" />';
+                html += '</div>';
+                html += '<label asp-for="Ingredients[' + (rowCount + 1) + '].Quantity"></label>';
+                html += '<input asp-for="Ingredients[' + (rowCount + 1) + '].Quantity" />';
+                html += '<label asp-for="Ingredients[' + (rowCount + 1) + '].Unit"></label>';
+                html += '<input asp-for="Ingredients[' + (rowCount + 1) + '].Unit" />';
+                html += '</div >';
+            $('#ingredientRow').append(html);
         }
 
         function addStepRow() {
-            var html = '<div class="step-row">';
-            html += '<input type="text" name="Recipe.Steps[].Description" />';
-            html += '<input type="number" name="Recipe.Steps[].Order" />';
-            html += '</div>';
-            $('#steps').append(html);
+            var rowCount = parseInt($("#totalSteps").val());
+            rowCount++;
+            $("#totalSteps").val(rowCount);
+            var html = '';
+                html + '<div class="step-row">'
+                html + '<input asp-for="Steps[' + (rowCount + 1) + '].Description" />'
+                html + '<input asp-for="Steps[' + (rowCount + 1) + '].Duration" />'
+                html + '<input asp-for="Steps[' + (rowCount + 1) + '].Unit" />'
+                html + '</div>'
+            $('#stepRow').append(html);
         }
     </script>
 }

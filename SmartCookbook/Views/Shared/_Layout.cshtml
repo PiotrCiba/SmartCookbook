@@ -23,19 +23,10 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Recipes" asp-action="Index">Index</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Recipes" asp-action="Index">Recipes</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Ingredients" asp-action="Index">Składniki</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="CookingSteps" asp-action="Index">Kroki gotowania</a>
-                        </li>
-                        <li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="AddRecipe" asp-action="Index">Dodaj przepis</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Recipes" asp-action="Create">Add Recipe</a>
                         </li>
                         <form class="d-flex" asp-controller="Recipes" asp-action="Index" method="get">
                             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searchString">

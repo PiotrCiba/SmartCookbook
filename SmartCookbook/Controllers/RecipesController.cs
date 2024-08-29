@@ -31,7 +31,7 @@ namespace SmartCookbook.Controllers
         // GET: Recipes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Recipes.ToListAsync());
+            return View(await _context.Recipes.Where(r => r.Private == false).ToListAsync());
         }
 
         // GET: Recipes/Details/5
@@ -89,7 +89,10 @@ namespace SmartCookbook.Controllers
                 return NotFound();
             }
 
-            var recipe = await _context.Recipes.FindAsync(id);
+            var recipe = await _context.Recipes.Include(r => r.Ingredients).ThenInclude(ii => ii.Ingredient)
+                                            .Include(r => r.Steps)
+                                            .FirstOrDefaultAsync(m => m.Id == id);
+
             if (recipe == null)
             {
                 return NotFound();
