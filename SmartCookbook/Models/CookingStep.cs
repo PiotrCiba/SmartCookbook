@@ -8,23 +8,17 @@
         public int Duration { get; set; } = 0;
         public string? Unit { get; set; } = "";
 
+        public int RecipeId { get; set; }
+        public Recipe? Recipe { get; set; }
+
         //constructor
-        public CookingStep(string? description, int duration, string? unit) 
-        { 
-            Description = description ?? string.Empty;
+        /*
+        public CookingStep(string description, int duration, string unit)
+        {
+            Description = description;
             Duration = duration;
             Unit = unit;
         }
-
-        public CookingStep(string? description)
-        {
-            Description = description ?? string.Empty;
-        }
-
-        public CookingStep()
-        {
-            Description = "";
-            Unit = "";
-        }
+        */
     }
 }

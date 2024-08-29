@@ -66,17 +66,13 @@ namespace SmartCookbook.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create([Bind("Id,Author,Private,UploadDate,Name,ImagePath,Description")] Recipe recipe,
-                                                List<IngredientInstance> ingredients,
-                                                List<CookingStep> steps)
+        public async Task<IActionResult> Create([Bind("Id,Author,Private,UploadDate,Name,ImagePath,Description,Ingredients,Steps")] Recipe recipe)
         {
             if (ModelState.IsValid)
             {
                 Recipe temp = recipe;
                 temp.Author = _userManager.GetUserName(User);
                 temp.UploadDate = DateTime.Now;
-                temp.Ingredients = ingredients;
-                temp.Steps = steps;
                 _context.Add(temp);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Details", new { id = temp.Id });
@@ -98,6 +94,13 @@ namespace SmartCookbook.Controllers
             {
                 return NotFound();
             }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (recipe.Author != user.UserName)
+            {
+                return Unauthorized();
+            }
+
             return View(recipe);
         }
 
@@ -107,7 +110,7 @@ namespace SmartCookbook.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Author,Private,UploadDate,Name,ImagePath,Description")] Recipe recipe)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Author,Private,UploadDate,Name,ImagePath,Description,Ingredients,Steps")] Recipe recipe)
         {
             if (id != recipe.Id)
             {
@@ -162,7 +165,8 @@ namespace SmartCookbook.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var recipe = await _context.Recipes.FindAsync(id);
+            var recipe = await _context.Recipes.FirstOrDefaultAsync(r => r.Id == id);
+
             if (recipe != null)
             {
                 _context.Recipes.Remove(recipe);

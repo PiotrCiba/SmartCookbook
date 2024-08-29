@@ -14,21 +14,6 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="Author" class="control-label"></label>
-                <input asp-for="Author" class="form-control" />
-                <span asp-validation-for="Author" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Private" /> @Html.DisplayNameFor(model => model.Private)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="UploadDate" class="control-label"></label>
-                <input asp-for="UploadDate" class="form-control" />
-                <span asp-validation-for="UploadDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
@@ -37,12 +22,49 @@
                 <label asp-for="ImagePath" class="control-label"></label>
                 <input asp-for="ImagePath" class="form-control" />
                 <span asp-validation-for="ImagePath" class="text-danger"></span>
-            </div>
+			</div>
+			<div class="form-group form-check">
+				<label class="form-check-label">
+					<input class="form-check-input" asp-for="Private" /> @Html.DisplayNameFor(model => model.Private)
+				</label>
+			</div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="Ingredients" class="control-label" />
+
+                @foreach (var ingredient in Model.Ingredients)
+                {
+                    <div class="ingredient">
+                        @Html.DisplayFor(modelItem => ingredient.Ingredient.Name)
+                        <button class="toggle-nutrition">Show Details</button>
+                        <div class="nutrition-info" style="display:none;">
+                            <p>Calories: @ingredient.Ingredient.Calories</p>
+                            <p>Carbs: @ingredient.Ingredient.Carbs</p>
+                            <p>Fats: @ingredient.Ingredient.Fat</p>
+                            <p>Proteins: @ingredient.Ingredient.Protein</p>
+                        </div>
+                        <input asp-for="@ingredient.Quantity" />
+                        <input asp-for="@ingredient.Unit" />
+                    </div>
+                }
+            </div>
+            <button type="button" onclick="addIngredientRow()">Add Ingredient</button>
+
+            <div id="steps">
+                @for (int i = 0; i < Model.Steps.Count; i++)
+                {
+                    <div class="step-row">
+                        <input asp-for="@Model.Steps[i].Description" />
+                        <input asp-for="@Model.Steps[i].Duration"/>
+                        <input asp-for="@Model.Steps[i].Unit"/>
+                    </div>
+                }
+            </div>
+            <button type="button" onclick="addStepRow()">Add Step</button>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -56,4 +78,28 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+
+        $(document).ready(function () {
+            $('.toggle-nutrition').click(function () {
+                $(this).next('.nutrition-info').slideToggle('fast');
+                // Toggle text between "Show Nutrition" and "Hide Nutrition"
+                var buttonText = $(this).text();
+                $(this).text(buttonText == "Show Details" ? "Hide Details" : "Show Details");
+            });
+        });
+
+        function addIngredientRow() {
+                
+            $('#ingredients').append(html);
+        }
+
+        function addStepRow() {
+            var html = '<div class="step-row">';
+            html += '<input type="text" name="Recipe.Steps[].Description" />';
+            html += '<input type="number" name="Recipe.Steps[].Order" />';
+            html += '</div>';
+            $('#steps').append(html);
+        }
+    </script>
 }

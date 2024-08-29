@@ -35,14 +35,14 @@
             <div class="form-group">
                 <label asp-for="Ingredients" class="control-label" />
                 <div id="newIngredient">
-                    <input type="hidden" id="total" value="0" />
+                    <input type="hidden" id="totalIngredients" value="0" />
                 </div>
                 <button id="addIngredient" type="button" class="btn btn-info">Add Ingredient</button>
             </div>
             <div class="form-group">
                 <label asp-for="Steps" class="control-label" />
                 <div id="newStep">
-                    <input type="hidden" id="total" value="0" />
+                    <input type="hidden" id="totalSteps" value="0" />
                 </div>
                 <button id="addStep" type="button" class="btn btn-info">Add Step</button>
             </div>            
@@ -63,9 +63,9 @@
     }
     <script>
         $("#addIngredient").click(function () {
-            var rowCount = parseInt($("#total").val());
+            var rowCount = parseInt($("#totalIngredients").val());
             rowCount++;
-            $("#total").val(rowCount);
+            $("#totalIngredients").val(rowCount);
             var html = '';
             html += '<div id="inputRow">';
 
@@ -89,19 +89,19 @@
             html += '<label asp-for"IngredientInstance.Unit" class="control-label"> Unit </label>';
             html += '<input type="text" name="Ingredients[' + (rowCount - 1) + '].Unit" placeholder="Enter Unit" />';
 
-            html += '<button id="removeRow" type="button" class="btn btn-danger">Remove</button>';
+            html += '<button id="removeIngredient" type="button" class="btn btn-danger">Remove</button>';
             html += '</div>';
             $('#newIngredient').append(html);
         });
 
         $("#addStep").click(function () {
-            var rowCount = parseInt($("#total").val());
+            var rowCount = parseInt($("#totalSteps").val());
             rowCount++;
-            $("#total").val(rowCount);
+            $("#totalSteps").val(rowCount);
             var html = '';
             html += '<div id="inputRow">';
 
-            html += '<label asp-for"CookingStep.Description" class="control-label"> Step ' + (rowCount - 1) + '</label>';
+            html += '<label asp-for"CookingStep.Description" class="control-label"> Step ' + (rowCount) + '</label>';
             html += '<input type="text" name="Steps[' + (rowCount - 1) + '].Description" placeholder="Enter Step" />';
 
             html += '<label asp-for"CookingStep.Duration" class="control-label"> Duration </label>';
@@ -110,7 +110,7 @@
             html += '<label asp-for"CookingStep.Unit" class="control-label"> Unit </label>';
             html += '<input type="text" name="Steps[' + (rowCount - 1) + '].Unit" placeholder="Enter Unit" />';
 
-            html += '<button id="removeRow" type="button" class="btn btn-danger">Remove</button>';
+            html += '<button id="removeStep" type="button" class="btn btn-danger">Remove</button>';
             html += '</div>';
 
             $('#newStep').append(html);
@@ -120,10 +120,17 @@
             $(this).closest('#inputRow').find('.details').slideToggle();
         });
 
-        $(document).on('click', '#removeRow', function () {
-            var rowCount = parseInt($("#total").val());
+        $(document).on('click', '#removeIngredient', function () {
+            var rowCount = parseInt($("#totalIngredients").val());
             rowCount--;
-            $("#total").val(rowCount);
+            $("#totalIngredients").val(rowCount);
+            $(this).closest('#inputRow').remove();
+        });
+
+        $(document).on('click', '#removeStep', function () {
+            var rowCount = parseInt($("#totalSteps").val());
+            rowCount--;
+            $("#totalSteps").val(rowCount);
             $(this).closest('#inputRow').remove();
         });
     </script>

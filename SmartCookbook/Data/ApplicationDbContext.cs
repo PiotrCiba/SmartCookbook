@@ -17,5 +17,40 @@ namespace SmartCookbook.Data
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<SmartCookbook.Models.IngredientInstance> IngredientInstance { get; set; } = default!;
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<IngredientInstance>()
+                .HasOne(ii => ii.Ingredient)
+                .WithMany(i => i.IngredientInstances)
+                .HasForeignKey(ii => ii.IngredientId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Recipe>()
+                .HasMany(r => r.Ingredients)
+                .WithOne(ii => ii.Recipe)
+                .HasForeignKey(ii => ii.RecipeId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Recipe>()
+                .HasMany(r => r.Steps)
+                .WithOne(s => s.Recipe)
+                .HasForeignKey(s => s.RecipeId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Recipe>()
+                .HasMany(r => r.Ratings)
+                .WithOne(ra => ra.Recipe)
+                .HasForeignKey(ra => ra.RecipeId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Recipe>()
+                .HasMany(r => r.Comments)
+                .WithOne(c => c.Recipe)
+                .HasForeignKey(c => c.RecipeId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }

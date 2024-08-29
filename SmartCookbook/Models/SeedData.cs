@@ -24,7 +24,7 @@ public class SeedData
 
             logger.LogInformation("SeedData: Seeding database");
 
-            context.AddRange(
+            /*context.AddRange(
 
                 new Recipe()
                 {
@@ -36,19 +36,19 @@ public class SeedData
                     Description = "A creamy pasta dish with chicken",
                     Ingredients = new List<IngredientInstance>
                     {
-                        new IngredientInstance(new Ingredient("Fettuccine", 371, 1.5, 75, 13), 100, "g"),
-                        new IngredientInstance(new Ingredient("Chicken Breast", 165, 3.6, 0, 31), 100, "g"),
-                        new IngredientInstance(new Ingredient("Heavy Cream", 340, 36, 3, 2), 100, "g"),
-                        new IngredientInstance(new Ingredient("Parmesan", 431, 29, 4, 38), 50, "g"),
-                        new IngredientInstance(new Ingredient("Garlic", 149, 0.5, 33, 6), 1, "clove")
+                        new (new ("Fettuccine", 371, 1.5, 75, 13 ), 100, "g" ),
+                        new (new ("Chicken Breast", 165, 3.6, 0, 31), 100, "g" ),
+                        new (new ("Heavy Cream", 340, 36, 3, 2), 100, "g"),
+                        new (new ("Parmesan", 431, 29, 4, 38), 50, "g"),
+                        new (new ("Garlic", 149, 0.5, 33, 6), 1, "clove")
                     },
                     Steps = new List<CookingStep>
                     {
-                        new CookingStep("Cook the fettuccine in a large pot of boiling salted water until al dente", 10, "minutes"),
-                        new CookingStep("Season the chicken with salt and pepper and cook in a skillet until browned", 5, "minutes"),
-                        new CookingStep("Add the garlic and cook for 1 minute", 1, "minute"),
-                        new CookingStep("Add the cream and cheese and cook until thickened", 5, "minutes"),
-                        new CookingStep("Toss the pasta with the sauce and serve", 1, "minute")
+                        new ("Cook the fettuccine in a large pot of boiling salted water until al dente", 10, "minutes" ),
+                        new ("Season the chicken with salt and pepper and cook in a skillet until browned", 5, "minutes"),
+                        new ("Add the garlic and cook for 1 minute", 1, "minute"),
+                        new ("Add the cream and cheese and cook until thickened", 5, "minutes"),
+                        new ("Toss the pasta with the sauce and serve", 1, "minute")
                     }
                 },
 
@@ -549,7 +549,10 @@ public class SeedData
                     }
                 }
 
-            );
+            );*/
+            
+            
+
             context.SaveChanges();
         };
     }
