@@ -1,53 +1,37 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SmartCookbook.Data;
-using SmartCookbook.Models;
-using System.Text.Json.Nodes;
+using SmartCookbook.Data.Migrations;
 
 namespace SmartCookbook.Controllers
 {
     public class SearchController : Controller
     {
-        private readonly UserManager<SmartCookbookUser> _userManager;
-        private readonly SignInManager<SmartCookbookUser> _signInManager;
         private readonly ApplicationDbContext _context;
 
-        public SearchController(
-            UserManager<SmartCookbookUser> userManager,
-            SignInManager<SmartCookbookUser> signInManager,
-            ApplicationDbContext context)
+        public SearchController(ApplicationDbContext context)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
             _context = context;
         }
 
-        public List<Recipe> Recipes(string searchString)
+        [HttpGet("autocomplete")]
+        public IActionResult Autocomplete(string term)
         {
-            if(_context.Recipes== null)
-            {
-                return new List<Recipe>();
-            }
+            var ingredients = _context.Ingredients
+                .Where(i => EF.Functions.Like(i.Name, $"%{term}%"))
+                .Select(i => new { value = i.Name })
+                .ToList(); 
+            return Ok(ingredients);
+        }
 
+        [HttpGet("searchrecipes")]
+        public IActionResult SearchRecipes([FromQuery] string[] ingredients)
+        {
             var recipes = _context.Recipes
-                .Where(r => (FuzzySharp.Fuzz.PartialRatio(r.Name, searchString) > 50 || 
-                            FuzzySharp.Fuzz.PartialRatio(r.Description, searchString) > 50) && 
-                            r.Private == false)
+                .Where(r => r.Ingredients.Any(i => ingredients.Contains(i.Ingredient.Name.ToLower())))
                 .ToList();
 
-            return recipes;
-        }
-
-        [HttpPost]
-        public IActionResult SearchRecipes(string searchString)
-        {
-            var recipes = Recipes(searchString);
-            return Json(recipes);
-        }
-
-        public IActionResult Index()
-        {
-            return View();
+            return PartialView("_RecipeList", recipes);
         }
     }
 }

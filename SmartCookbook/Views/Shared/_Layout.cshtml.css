@@ -62,3 +62,14 @@ button.accept-policy {
     flex-wrap: wrap;
     margin-bottom: 10px;
 }
+
+#autocomplete {
+    width: 300px;
+}
+
+.ui-autocomplete {
+    max-height: 200px;
+    overflow-y: auto;
+    /* prevent vertical scrollbar */
+    *width: 100%;
+}

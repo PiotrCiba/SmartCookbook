@@ -3,12 +3,21 @@
 }
 
 <div class="text-center">
+    <h1>Recipe Search</h1>
     <input type="text" id="search-input" placeholder="Search Recipes...">
 	<ul id="search-results"></ul>
+</div>
+<div>
+    <h1>Search by Ingredient</h1>
+    <input id="ingredientInput" type="text" placeholder="Search by ingredient" />
+    <button id="searchButton">Search</button>
+    <ul id="selectedIngredients"></ul>
+    <ul id="resultArea"></ul>
 </div>
 
 @section Scripts{
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
         $(document).ready(function () {
             $('#search-input').on('keyup', function () {
@@ -31,5 +40,107 @@
                 }
             });
         });
+    </script>
+
+    <script>
+        $(function () {
+            $("#ingredientInput").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: '@Url.Action("autocomplete","Search")',
+                        dataType: "json",
+                        data: { term: request.term.toLowerCase() },
+                        success: function (data) {
+                            response(data);
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function (event, ui) {
+                    var selectedIngredient = ui.item.value;
+                    addSelectedIngredient(selectedIngredient);
+                },
+                open: function () {
+                    $(this).removeClass("ui-menu");
+                }
+            });
+
+            $("#searchButton").click(function () {
+                var ingredients = getSelectedIngredients();
+                displayRecipes(ingredients);
+            });
+
+            // Add this function to create the overlay
+            function createOverlay() {
+                var input = $("#ingredientInput");
+                var overlay = $('<div id="autocomplete-overlay"></div>');
+
+                // Position the overlay
+                overlay.css({
+                    position: 'absolute',
+                    top: input.position().top + input.outerHeight(),
+                    left: input.position().left,
+                    width: input.width(),
+                    height: input.height()
+                });
+
+                // Add a semi-transparent background
+                overlay.css('background', 'rgba(255, 255, 255, 0.7)');
+                overlay.css('z-index', 999);
+
+                // Add to the document body
+                $('body').append(overlay);
+
+                // Remove the overlay when autocomplete closes
+                $(this).autocomplete('close', function () {
+                    $('#autocomplete-overlay').remove();
+                });
+            }
+
+            // Call the overlay creation function after autocomplete initialization
+            $("#ingredientInput").autocomplete({
+                create: createOverlay
+            });
+
+            // Function to add selected ingredients
+            function addSelectedIngredient(ingredient) {
+                var ul = document.getElementById("selectedIngredients");
+                if (ul) {
+                    var li = document.createElement("li");
+                    li.textContent = ingredient;
+                    ul.appendChild(li);
+                }
+            }
+
+            // Function to get selected ingredients
+            function getSelectedIngredients() {
+                var selectedIngredients = [];
+                var ul = document.getElementById("selectedIngredients");
+                if (ul) {
+                    var lis = ul.getElementsByTagName("li");
+                    for (var i = 0; i < lis.length; i++) {
+                        selectedIngredients.push(lis[i].textContent);
+                    }
+                }
+                return selectedIngredients;
+            }
+
+            // Function to display recipes
+            function displayRecipes(ingredients) {
+                $.ajax({
+                    url: '@Url.Action("searchrecipes","Search")',
+                    type: "GET",
+                    dataType: "json",
+                    data: { ingredients: JSON.stringify(ingredients.map(i => i.toLowerCase())) },
+                    success: function (data) {
+                        var resultArea = document.getElementById("resultArea");
+                        if (resultArea) {
+                            resultArea.innerHTML = data;
+                        }
+                    }
+                });
+            }
+        });
+
     </script>
 }
