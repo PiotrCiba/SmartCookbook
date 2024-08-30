@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SmartCookbook.Data;
 using SmartCookbook.Models;
+using System.Text.Json.Nodes;
 
 namespace SmartCookbook.Controllers
 {
@@ -21,24 +22,27 @@ namespace SmartCookbook.Controllers
             _context = context;
         }
 
-        public IActionResult SearchRecipes(string searchString)
+        public List<Recipe> Recipes(string searchString)
         {
             if(_context.Recipes== null)
             {
-                return Problem("The Database does not contain any recipes.");
+                return new List<Recipe>();
             }
 
             var recipes = _context.Recipes
-                .Where(r => FuzzySharp.Fuzz.PartialRatio(r.Name, searchString) > 50 || 
-                            FuzzySharp.Fuzz.PartialRatio(r.Description, searchString) > 50)
+                .Where(r => (FuzzySharp.Fuzz.PartialRatio(r.Name, searchString) > 50 || 
+                            FuzzySharp.Fuzz.PartialRatio(r.Description, searchString) > 50) && 
+                            r.Private == false)
                 .ToList();
 
-            if(recipes.Count == 0)
-            {
-                return Problem("No recipes found.");
-            }
+            return recipes;
+        }
 
-            return View(recipes);
+        [HttpPost]
+        public IActionResult SearchRecipes(string searchString)
+        {
+            var recipes = Recipes(searchString);
+            return Json(recipes);
         }
 
         public IActionResult Index()

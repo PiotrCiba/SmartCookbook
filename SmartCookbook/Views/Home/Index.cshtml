@@ -3,6 +3,33 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <input type="text" id="search-input" placeholder="Search Recipes...">
+	<ul id="search-results"></ul>
 </div>
+
+@section Scripts{
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#search-input').on('keyup', function () {
+                let query = $(this).val();
+
+                if (query.length > 2) { // Start searching after 3 characters
+                    $.ajax({
+                        url: '@Url.Action("Index", "Recipes")',
+                        type: 'GET',
+                        data: { searchString: query },
+                        success: function (data) {
+                            $('#search-results').html(data); // Load the partial view into the container
+                        },
+                        error: function () {
+                            console.log("Error retrieving search results.");
+                        }
+                    });
+                } else {
+                    $('#search-results').empty(); // Clear results if query is too short
+                }
+            });
+        });
+    </script>
+}

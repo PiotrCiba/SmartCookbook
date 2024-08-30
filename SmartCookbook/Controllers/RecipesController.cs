@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SmartCookbook.Data;
 using SmartCookbook.Models;
+using FuzzySharp;
 
 namespace SmartCookbook.Controllers
 {
@@ -29,9 +31,24 @@ namespace SmartCookbook.Controllers
         }
 
         // GET: Recipes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? searchString)
         {
-            return View(await _context.Recipes.Where(r => r.Private == false).ToListAsync());
+            var recipes = _context.Recipes.Where(r => r.Private == false);
+            if (string.IsNullOrEmpty(searchString))
+            {
+                return View(recipes);
+            }
+
+            var results = recipes.Where(s => s.Name.ToUpper().Contains(searchString.ToUpper()) 
+                                    || s.Description.ToUpper().Contains(searchString.ToUpper()))
+                                    .ToList();
+
+            if (Request.Headers["x-requested-with"] == "XMLHttpRequest")
+            {
+                return PartialView("_RecipeList", results);
+            }
+
+            return View(results);
         }
 
         // GET: Recipes/Details/5

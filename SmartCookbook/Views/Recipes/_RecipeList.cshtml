@@ -1,0 +1,13 @@
+﻿@model IEnumerable<SmartCookbook.Models.Recipe>
+
+<ul>
+	@foreach (var recipe in Model)
+	{
+		<li>
+			<a href="@Url.Action("Details", "Recipe", new { id = recipe.Id })">@recipe.Name</a>
+		</li>
+	}
+</ul>
+
+
+
