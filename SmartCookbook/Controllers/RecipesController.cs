@@ -61,6 +61,7 @@ namespace SmartCookbook.Controllers
 
             var recipe = await _context.Recipes.Include(r => r.Ingredients).ThenInclude(ii => ii.Ingredient)
                                             .Include(r => r.Steps)
+                                            .Include(r => r.Ratings)
                                             .FirstOrDefaultAsync(m => m.Id == id);
             if (recipe == null)
             {

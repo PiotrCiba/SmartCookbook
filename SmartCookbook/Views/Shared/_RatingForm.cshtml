@@ -1,0 +1,23 @@
+﻿@model SmartCookbook.Models.Rating
+@inject IViewComponentHelper Helper
+
+<form asp-action="RateRecipe" asp-controller="Ratings" method="post">
+    <input type="hidden" name="RecipeId" value="@Model.Recipe.Id" />
+    <label for="rating">Rating:</label>
+    <input type="range" min="1" max="5" value="3" id="rating" name="rating" required>
+    <output for="rating" id="ratingDisplay">3</output>
+    <br><br>
+    <label for="comment">Comment:</label>
+    <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
+    <br><br>
+    <button type="submit">Submit Rating</button>
+</form>
+
+<script>
+    const ratingDisplay = document.getElementById('ratingDisplay');
+    const rating = document.getElementById('rating');
+
+    rating.addEventListener('input', function() {
+        ratingDisplay.value = this.value;
+    });
+</script>

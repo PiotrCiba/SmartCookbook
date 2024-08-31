@@ -83,7 +83,40 @@
     </dl>
 </div>
 
+<h5>Ratings</h5>
+<ul>
+    @foreach (var rating in Model.Ratings)
+    {
+        <li>
+            @rating.RatingValue - "@rating.Comment" - @rating.UserName
+            @if (User.Identity.IsAuthenticated && rating.UserName == User.Identity.Name)
+            {
+                <form asp-action="DeleteRating" asp-controller="Ratings">
+                    <input type="hidden" name="ratingId" value="@rating.Id" />
+                    <input type="submit" value="Delete" class="btn btn-danger" />
+                </form>
+            }
+        </li>
+    }
+</ul>
+
+<h6>Rate this Recipe</h6>
+@if(User.Identity.IsAuthenticated)
+{
+	<partial name="_RatingForm" model="new SmartCookbook.Models.Rating { Recipe = Model }" />
+}
+else
+{
+    <p>You must be <a href="/Identity/Account/Login">logged in</a> to rate this recipe</p>
+}
+
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    @if(Model.Author == User.Identity.Name)
+	{
+		<a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> 
+        <a>|</a>
+		<a asp-action="Delete" asp-route-id="@Model?.Id">Delete</a>
+	}
     <a asp-action="Index">Back to List</a>
 </div>

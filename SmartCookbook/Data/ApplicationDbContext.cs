@@ -15,7 +15,6 @@ namespace SmartCookbook.Data
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<CookingStep> CookingSteps { get; set; }
         public DbSet<Rating> Ratings { get; set; }
-        public DbSet<Comment> Comments { get; set; }
         public DbSet<SmartCookbook.Models.IngredientInstance> IngredientInstance { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -44,12 +43,6 @@ namespace SmartCookbook.Data
                 .HasMany(r => r.Ratings)
                 .WithOne(ra => ra.Recipe)
                 .HasForeignKey(ra => ra.RecipeId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.Entity<Recipe>()
-                .HasMany(r => r.Comments)
-                .WithOne(c => c.Recipe)
-                .HasForeignKey(c => c.RecipeId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
